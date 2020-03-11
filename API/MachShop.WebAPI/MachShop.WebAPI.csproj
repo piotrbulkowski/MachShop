@@ -16,7 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Products\MachShop.Products.Common\MachShop.Products.Common.csproj" />
     <ProjectReference Include="..\..\Modules\Products\MachShop.Products.Infrastructure\MachShop.Products.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Users\MachShop.Users.Common\MachShop.Users.Common.csproj" />
+    <ProjectReference Include="..\..\Modules\Users\MachShop.Users.Infrastructure\MachShop.Users.Infrastructure.csproj" />
   </ItemGroup>
 
 

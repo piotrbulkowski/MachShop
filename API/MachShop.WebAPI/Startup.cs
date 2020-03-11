@@ -13,12 +13,9 @@ namespace MachShop.WebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration)
+            => Configuration = configuration;
 
         public IServiceProvider ConfigureServices(IServiceCollection services, IHostEnvironment env)
         {
@@ -34,7 +31,7 @@ namespace MachShop.WebAPI
                 .AddGraphTypes(ServiceLifetime.Scoped);
 
             services.AddMvc();
-            return AutofacExtensions.AddAutofacProvider(services);
+            return AutofacExtensions.AddAutofacProvider(services, Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostEnvironment env)
