@@ -45,7 +45,11 @@ namespace MachShop.WebAPI
             app.UseCors("AllowAllCORS");
 
             app.UseGraphQL<MachShopSchema>();
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
+            {
+                Path = "/playground",
+                GraphQLEndPoint = "/graphql"
+            });
 
             app.UseAuthentication();
             app.UseMvc();
