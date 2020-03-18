@@ -1,6 +1,5 @@
 using Autofac;
 using GraphQL;
-using GraphQL.Http;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using MachShop.Products.Common;
@@ -34,12 +33,8 @@ namespace MachShop.WebAPI
                 => builder.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod()));
-            // GraphQL
-            // services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))
-            //      .AddScoped<MachShopSchema>();
             services.AddGraphQL(x
-                    => x.ExposeExceptions = !Environment.IsDevelopment()) // true only in dev mode
-                .AddDataLoader();
+                => x.ExposeExceptions = !Environment.IsDevelopment()); // true only in dev mode
 
             services.AddMvc();
         }
@@ -50,15 +45,13 @@ namespace MachShop.WebAPI
 
             containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
 
-            containerBuilder.RegisterInstance(new DocumentWriter()).As<IDocumentWriter>();
-            containerBuilder.RegisterInstance(new DocumentExecuter()).As<IDocumentExecuter>();
-
             containerBuilder.RegisterModule(new ProductsAutofacModule());
             containerBuilder.RegisterModule(new UsersAutofacModule());
 
             UsersStartup.Bootstrap(connectionString);
             ProductsStartup.Bootstrap(connectionString);
 
+            // GraphQL
             containerBuilder.RegisterType<MachShopCompositeQuery>().AsSelf();
             containerBuilder.Register(c =>
             {
@@ -89,7 +82,7 @@ namespace MachShop.WebAPI
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello World.");
+                    await context.Response.WriteAsync("Go to /playground to have fun with GraphQL :)");
                 });
             });
         }
