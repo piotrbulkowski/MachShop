@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using MachShop.WebAPI.BuildingBlocks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -16,7 +15,7 @@ namespace MachShop.WebAPI.Controllers
         }
 
         [HttpPost("[controller]")]
-        public async Task<IActionResult> PostQuery([FromBody] GraphQlQuery query)
+        public IActionResult PostQuery([FromBody] GraphQlQuery query)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
 

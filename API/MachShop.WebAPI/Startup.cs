@@ -1,10 +1,15 @@
-using System;
+using Autofac;
 using GraphQL;
+using GraphQL.Http;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
-using MachShop.WebAPI.Extensions;
+using MachShop.Products.Common;
+using MachShop.Users.Common;
 using MachShop.WebAPI.GraphQL;
+using MachShop.WebAPI.Modules;
+using MachShop.WebAPI.Modules.Products;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,26 +19,54 @@ namespace MachShop.WebAPI
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public Startup(IConfiguration configuration)
-            => Configuration = configuration;
+        private IHostEnvironment Environment { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services, IHostEnvironment env)
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
+            Configuration = configuration;
+            Environment = environment;
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.Configure<IISServerOptions>(o => o.AllowSynchronousIO = true);
             services.AddCors(options => options.AddPolicy("AllowAllCORS", builder
                 => builder.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod()));
             // GraphQL
-            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))
-                .AddScoped<MachShopSchema>();
+            // services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService))
+            //      .AddScoped<MachShopSchema>();
             services.AddGraphQL(x
-                    => x.ExposeExceptions = !env.IsDevelopment()) // true only in dev mode
-                .AddGraphTypes(ServiceLifetime.Scoped);
+                    => x.ExposeExceptions = !Environment.IsDevelopment()) // true only in dev mode
+                .AddDataLoader();
 
             services.AddMvc();
-            return AutofacExtensions.AddAutofacProvider(services, Configuration);
         }
 
+        public void ConfigureContainer(ContainerBuilder containerBuilder)
+        {
+            var connectionString = Configuration.GetConnectionString("localDb");
+
+            containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
+
+            containerBuilder.RegisterInstance(new DocumentWriter()).As<IDocumentWriter>();
+            containerBuilder.RegisterInstance(new DocumentExecuter()).As<IDocumentExecuter>();
+
+            containerBuilder.RegisterModule(new ProductsAutofacModule());
+            containerBuilder.RegisterModule(new UsersAutofacModule());
+
+            UsersStartup.Bootstrap(connectionString);
+            ProductsStartup.Bootstrap(connectionString);
+
+            containerBuilder.RegisterType<MachShopCompositeQuery>().AsSelf();
+            containerBuilder.Register(c =>
+            {
+                var cc = c.Resolve<IComponentContext>();
+                var dependencyResolver = new FuncDependencyResolver(type => cc.Resolve(type));
+                return new MachShopSchema(dependencyResolver);
+            }).AsSelf().AsImplementedInterfaces().SingleInstance();
+        }
         public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -51,8 +84,14 @@ namespace MachShop.WebAPI
                 GraphQLEndPoint = "/graphql"
             });
 
-            app.UseAuthentication();
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("Hello World.");
+                });
+            });
         }
     }
 }
