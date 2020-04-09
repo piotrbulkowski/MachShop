@@ -1,4 +1,6 @@
-﻿namespace MachShop.Products.Infrastructure.Abstract
+﻿using MachShop.Shared;
+
+namespace MachShop.Products.Infrastructure.Abstract
 {
-    public interface IProductsModule { }
+    public interface IProductsModule : IModule { }
 }

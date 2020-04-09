@@ -4,9 +4,10 @@ using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using MachShop.Products.Common;
 using MachShop.Users.Common;
+using MachShop.WebAPI.BuildingBlocks.Abstract;
 using MachShop.WebAPI.GraphQL;
-using MachShop.WebAPI.Modules;
 using MachShop.WebAPI.Modules.Products;
+using MachShop.WebAPI.Modules.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -52,7 +53,14 @@ namespace MachShop.WebAPI
             ProductsStartup.Bootstrap(connectionString);
 
             // GraphQL
+            containerBuilder
+                .RegisterAssemblyTypes(System.Reflection.Assembly.GetExecutingAssembly())
+                .AssignableTo<IGraphQueryMarker>()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
             containerBuilder.RegisterType<MachShopCompositeQuery>().AsSelf();
+            containerBuilder.RegisterType<MachShopCompositeMutation>().AsSelf();
             containerBuilder.Register(c =>
             {
                 var cc = c.Resolve<IComponentContext>();

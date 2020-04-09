@@ -8,6 +8,7 @@ namespace MachShop.WebAPI.GraphQL
         public MachShopSchema(IDependencyResolver resolver) : base(resolver)
         {
             Query = resolver.Resolve<MachShopCompositeQuery>();
+            Mutation = resolver.Resolve<MachShopCompositeMutation>();
         }
     }
 }

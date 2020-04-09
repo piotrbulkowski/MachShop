@@ -1,6 +1,4 @@
 ﻿namespace MachShop.WebAPI.BuildingBlocks.Abstract
 {
-    public interface IGraphQueryMarker
-    {
-    }
+    public interface IGraphQueryMarker { }
 }

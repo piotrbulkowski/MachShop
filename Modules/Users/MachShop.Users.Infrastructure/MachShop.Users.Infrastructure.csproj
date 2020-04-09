@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\MachShop.Shared\MachShop.Shared.csproj" />
     <ProjectReference Include="..\MachShop.Users.Domain\MachShop.Users.Domain.csproj" />
   </ItemGroup>
 

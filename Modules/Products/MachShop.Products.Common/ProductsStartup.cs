@@ -6,7 +6,7 @@ namespace MachShop.Products.Common
 {
     public class ProductsStartup
     {
-        private IContainer container;
+        private static IContainer _container;
 
         public static void Bootstrap(string connectionString)
         {
@@ -21,6 +21,9 @@ namespace MachShop.Products.Common
             .AsSelf()
             .As<DbContext>()
             .InstancePerLifetimeScope();
+
+            _container = containerBuilder.Build();
+            ProductsCompositionRoot.Container = _container;
         }
     }
 }
