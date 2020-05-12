@@ -1,26 +1,20 @@
 ﻿using Autofac;
-using MachShop.Users.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+using MachShop.Users.Common.Modules;
 
 namespace MachShop.Users.Common
 {
     public class UsersStartup
     {
-        private readonly IContainer container;
+        private static IContainer _container;
 
         public static void Bootstrap(string connectionString)
         {
             var containerBuilder = new ContainerBuilder();
-            containerBuilder.Register(db =>
-            {
-                var dbContextOptions = new DbContextOptionsBuilder<UsersContext>();
-                dbContextOptions.UseSqlServer(connectionString);
 
-                return new UsersContext(dbContextOptions.Options);
-            })
-            .AsSelf()
-            .As<DbContext>()
-            .InstancePerLifetimeScope();
+            containerBuilder.RegisterModule(new DatabaseModule(connectionString));
+
+            _container = containerBuilder.Build();
+            UsersCompositionRoot.Container = _container;
         }
     }
 }
