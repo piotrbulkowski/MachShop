@@ -17,6 +17,9 @@ namespace MachShop.Products.Infrastructure.Repositories
         public async Task<IEnumerable<Product>> GetAllAsync()
             => await _productsContext.Products.ToListAsync();
 
+        public async Task<Product> GetByIdAsync(int id)
+            => await _productsContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+
         public void Remove(Product entity)
             => _productsContext.Products.Remove(entity);
     }

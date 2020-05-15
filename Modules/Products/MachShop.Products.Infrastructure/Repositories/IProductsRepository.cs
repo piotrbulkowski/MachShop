@@ -8,5 +8,6 @@ namespace MachShop.Products.Infrastructure.Repositories
     public interface IProductsRepository : IRepository<Product>
     {
         Task<IEnumerable<Product>> GetAllAsync();
+        Task<Product> GetByIdAsync(int id);
     }
 }
