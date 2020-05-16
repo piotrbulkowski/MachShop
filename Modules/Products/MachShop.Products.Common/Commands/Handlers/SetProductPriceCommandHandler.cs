@@ -17,7 +17,10 @@ namespace MachShop.Products.Common.Commands.Handlers
             => _productsRepository = productsRepository;
         public async Task<Unit> Handle(SetProductPriceCommand request, CancellationToken cancellationToken)
         {
-            var product = _productsRepository.GetByIdAsync(request.Id);
+            var product = await _productsRepository.GetByIdAsync(request.Id);
+
+            product.SetPrice(request.Price);
+
             return default;
         }
     }
