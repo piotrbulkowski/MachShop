@@ -1,8 +1,7 @@
 ﻿using MachShop.Products.Domain.BuildingBlocks;
 using MachShop.Shared.Exceptions;
-using System;
 
-namespace MachShop.Products.Domain.Models
+namespace MachShop.Products.Domain.Product
 {
     public class Product : IAggregateRoot
     {
