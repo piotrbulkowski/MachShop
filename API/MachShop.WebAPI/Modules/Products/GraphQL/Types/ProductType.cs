@@ -1,5 +1,5 @@
 ﻿using GraphQL.Types;
-using MachShop.Products.Domain.Models;
+using MachShop.Products.Domain.Product;
 
 namespace MachShop.WebAPI.Modules.Products.GraphQL
 {

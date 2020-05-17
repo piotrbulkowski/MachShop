@@ -1,4 +1,4 @@
-﻿namespace MachShop.WebAPI.BuildingBlocks
+﻿namespace MachShop.WebAPI.GraphQL.Configuration
 {
     public class GraphQlQuery
     {

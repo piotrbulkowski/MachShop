@@ -1,5 +1,5 @@
 ﻿using System;
-using MachShop.WebAPI.BuildingBlocks;
+using MachShop.WebAPI.GraphQL.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

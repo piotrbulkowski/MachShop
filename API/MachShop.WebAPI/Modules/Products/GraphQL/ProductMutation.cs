@@ -1,9 +1,9 @@
 ﻿using GraphQL.Types;
-using MachShop.Products.Domain.Models;
 using MachShop.Products.Infrastructure.Abstract;
-using MachShop.WebAPI.BuildingBlocks;
 using MachShop.WebAPI.Modules.Products.GraphQL.Types;
 using MachShop.Products.Common.Commands;
+using MachShop.Products.Domain.Product;
+using MachShop.WebAPI.GraphQL.Configuration;
 
 namespace MachShop.WebAPI.Modules.Products.GraphQL
 {

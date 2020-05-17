@@ -1,6 +1,6 @@
 ﻿using GraphQL.Types;
-using MachShop.WebAPI.BuildingBlocks.Abstract;
 using System.Collections.Generic;
+using MachShop.WebAPI.GraphQL.Configuration;
 
 namespace MachShop.WebAPI.GraphQL
 {

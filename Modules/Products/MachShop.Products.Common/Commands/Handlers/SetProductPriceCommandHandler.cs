@@ -26,6 +26,7 @@ namespace MachShop.Products.Common.Commands.Handlers
 
             product.SetPrice(request.Price);
 
+            //_eventBus.RaiseEvent(new )
             return default;
         }
     }

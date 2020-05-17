@@ -3,9 +3,11 @@ using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using MachShop.Products.Common;
+using MachShop.Shared;
 using MachShop.Users.Common;
-using MachShop.WebAPI.BuildingBlocks.Abstract;
+using MachShop.WebAPI.Configuration;
 using MachShop.WebAPI.GraphQL;
+using MachShop.WebAPI.GraphQL.Configuration;
 using MachShop.WebAPI.Modules.Products;
 using MachShop.WebAPI.Modules.Users;
 using Microsoft.AspNetCore.Builder;
@@ -20,11 +22,22 @@ namespace MachShop.WebAPI
     {
         public IConfiguration Configuration { get; }
         private IHostEnvironment Environment { get; }
+        private IDatabaseSettings DatabaseSettings { get; }
 
         public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
             Environment = environment;
+            DatabaseSettings = Configuration.GetSection(nameof(DatabaseSettings)).Get<DatabaseSettings>();
+            if(DatabaseSettings.UsePostgreSql)
+                DatabaseSettings.ConnectionString =
+                    Configuration.GetSection(nameof(DatabaseSettings)).GetConnectionString("PostgreSqlDb");
+            else if(DatabaseSettings.UseMSSql)
+                DatabaseSettings.ConnectionString =
+                    Configuration.GetSection(nameof(DatabaseSettings)).GetConnectionString("MSSqlDb");
+            else if(DatabaseSettings.UseOracle)
+                DatabaseSettings.ConnectionString =
+                    Configuration.GetSection(nameof(DatabaseSettings)).GetConnectionString("OracleDb");
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -42,15 +55,15 @@ namespace MachShop.WebAPI
 
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
-            var connectionString = Configuration.GetConnectionString("localDb");
+            var databaseSettings = 
 
             containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
 
             containerBuilder.RegisterModule(new ProductsAutofacModule());
             containerBuilder.RegisterModule(new UsersAutofacModule());
 
-            UsersStartup.Bootstrap(connectionString);
-            ProductsStartup.Bootstrap(connectionString);
+            UsersStartup.Bootstrap(DatabaseSettings);
+            ProductsStartup.Bootstrap(DatabaseSettings);
 
             // GraphQL
             containerBuilder

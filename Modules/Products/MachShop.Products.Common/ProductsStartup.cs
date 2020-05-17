@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using MachShop.Products.Common.Configuration;
 using MachShop.Products.Common.Modules;
+using MachShop.Products.Domain.BuildingBlocks;
+using MachShop.Shared;
 
 namespace MachShop.Products.Common
 {
@@ -8,12 +10,14 @@ namespace MachShop.Products.Common
     {
         private static IContainer _container;
 
-        public static void Bootstrap(string connectionString)
+        public static void Bootstrap(IDatabaseSettings dbSettings)
         {
             var containerBuilder = new ContainerBuilder();
 
-            containerBuilder.RegisterModule(new DatabaseModule(connectionString));
+            containerBuilder.RegisterModule(new DatabaseModule(dbSettings));
             containerBuilder.RegisterInstance(AutoMapperConfig.Initialize());
+
+            //containerBuilder.RegisterType<IEventBus>().As<>()
 
             _container = containerBuilder.Build();
             ProductsCompositionRoot.Container = _container;

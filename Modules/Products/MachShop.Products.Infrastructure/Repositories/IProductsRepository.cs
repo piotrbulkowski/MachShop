@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using MachShop.Products.Domain.Models;
+using MachShop.Products.Domain.Product;
 using MachShop.Shared.Repositories;
 
 namespace MachShop.Products.Infrastructure.Repositories

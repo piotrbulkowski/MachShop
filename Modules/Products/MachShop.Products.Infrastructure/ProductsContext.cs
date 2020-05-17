@@ -1,5 +1,5 @@
 ﻿using System;
-using MachShop.Products.Domain.Models;
+using MachShop.Products.Domain.Product;
 using Microsoft.EntityFrameworkCore;
 
 namespace MachShop.Products.Infrastructure
