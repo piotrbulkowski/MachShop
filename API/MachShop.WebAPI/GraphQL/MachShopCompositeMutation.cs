@@ -11,8 +11,8 @@ namespace MachShop.WebAPI.GraphQL
             Name = "MachShopCompositeMutation";
             foreach (var marker in graphMutationMarkers)
             {
-                var q = marker as ObjectGraphType<object>;
-                foreach (var field in q.Fields)
+                var graphObject = marker as ObjectGraphType<object>;
+                foreach (var field in graphObject.Fields)
                     AddField(field);
             }
         }

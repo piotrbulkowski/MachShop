@@ -2,6 +2,7 @@
 using MachShop.Products.Common;
 using MachShop.Products.Infrastructure;
 using MachShop.WebAPI.Modules.Products.GraphQL;
+using MachShop.WebAPI.Modules.Products.GraphQL.Types;
 
 namespace MachShop.WebAPI.Modules.Products
 {

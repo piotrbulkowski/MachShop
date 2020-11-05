@@ -3,16 +3,14 @@ using MachShop.Products.Common.Queries;
 using System.Collections.Generic;
 using MachShop.Products.Infrastructure;
 using MachShop.WebAPI.GraphQL.Configuration;
+using MachShop.WebAPI.Modules.Products.GraphQL.Types;
 
 namespace MachShop.WebAPI.Modules.Products.GraphQL
 {
     public class ProductQuery : ObjectGraphType, IGraphQueryMarker
     {
-        private readonly IProductsModule _productsModule;
         public ProductQuery(IProductsModule productsModule)
         {
-            _productsModule = productsModule;
-
             FieldAsync<ListGraphType<ProductType>>("products",
                 arguments: new QueryArguments(new List<QueryArgument>
                 {
@@ -39,7 +37,7 @@ namespace MachShop.WebAPI.Modules.Products.GraphQL
                 }),
                 resolve: async context =>
                 {
-                    var products = await _productsModule.ExecuteQueryAsync(new GetAllProductsQuery());
+                    var products = await productsModule.ExecuteQueryAsync(new GetAllProductsQuery());
                     return products;
                 });
         }

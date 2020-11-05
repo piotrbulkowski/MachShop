@@ -1,10 +1,9 @@
 ﻿using GraphQL.Types;
 using MachShop.Products.Domain.Entities;
-using MachShop.Products.Domain.ValueObjects;
 
-namespace MachShop.WebAPI.Modules.Products.GraphQL
+namespace MachShop.WebAPI.Modules.Products.GraphQL.Types
 {
-    public class ProductType : ObjectGraphType<Product>
+    public sealed class ProductType : ObjectGraphType<Product>
     {
         public ProductType()
         {

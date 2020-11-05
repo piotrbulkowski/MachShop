@@ -3,7 +3,7 @@ using MachShop.Users.Domain.Models;
 
 namespace MachShop.WebAPI.Modules.Users.GraphQL
 {
-    public class UserType : ObjectGraphType<User>
+    public sealed class UserType : ObjectGraphType<User>
     {
         public UserType()
         {

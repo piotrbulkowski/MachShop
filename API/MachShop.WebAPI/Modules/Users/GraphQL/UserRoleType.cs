@@ -3,7 +3,7 @@ using MachShop.Users.Domain.Models;
 
 namespace MachShop.WebAPI.Modules.Users.GraphQL
 {
-    public class UserRoleType : ObjectGraphType<UserRole>
+    public sealed class UserRoleType : ObjectGraphType<UserRole>
     {
         public UserRoleType()
         {

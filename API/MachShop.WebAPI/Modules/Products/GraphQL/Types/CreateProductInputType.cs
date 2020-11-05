@@ -3,7 +3,7 @@ using MachShop.Products.Domain.Entities;
 
 namespace MachShop.WebAPI.Modules.Products.GraphQL.Types
 {
-    public class CreateProductInputType : InputObjectGraphType<Product>
+    public sealed class CreateProductInputType : InputObjectGraphType<Product>
     {
         public CreateProductInputType()
         {

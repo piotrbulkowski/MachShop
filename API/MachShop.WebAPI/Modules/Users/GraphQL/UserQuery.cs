@@ -8,10 +8,8 @@ namespace MachShop.WebAPI.Modules.Users.GraphQL
 {
     public class UserQuery : ObjectGraphType, IGraphQueryMarker
     {
-        private static IUsersModule _usersModule;
         public UserQuery(IUsersModule usersModule)
         {
-            _usersModule = usersModule;
             FieldAsync<ListGraphType<UserType>>("users",
                 arguments: new QueryArguments(new List<QueryArgument>
                 {
@@ -30,7 +28,7 @@ namespace MachShop.WebAPI.Modules.Users.GraphQL
                 }),
                 resolve: async context =>
                 {
-                    var products = await _usersModule.ExecuteQueryAsync(new GetAllUsersQuery());
+                    var products = await usersModule.ExecuteQueryAsync(new GetAllUsersQuery());
                     return products;
                 });
         }
