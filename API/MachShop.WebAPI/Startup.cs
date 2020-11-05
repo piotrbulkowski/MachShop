@@ -1,17 +1,26 @@
+using System;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using GraphQL;
+using GraphQL.DataLoader;
+using GraphQL.Instrumentation;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
+using GraphQL.SystemTextJson;
+using GraphQL.Types;
 using MachShop.Products.Common;
 using MachShop.Shared;
 using MachShop.Users.Common;
 using MachShop.WebAPI.Configuration;
 using MachShop.WebAPI.GraphQL;
 using MachShop.WebAPI.GraphQL.Configuration;
+using MachShop.WebAPI.Modules;
 using MachShop.WebAPI.Modules.Products;
 using MachShop.WebAPI.Modules.Users;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +29,7 @@ namespace MachShop.WebAPI
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
         private IHostEnvironment Environment { get; }
         private IDatabaseSettings DatabaseSettings { get; }
 
@@ -35,30 +44,33 @@ namespace MachShop.WebAPI
             else if(DatabaseSettings.UseMSSql)
                 DatabaseSettings.ConnectionString =
                     Configuration.GetSection(nameof(DatabaseSettings)).GetConnectionString("MSSqlDb");
-            else if(DatabaseSettings.UseOracle)
-                DatabaseSettings.ConnectionString =
-                    Configuration.GetSection(nameof(DatabaseSettings)).GetConnectionString("OracleDb");
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<IISServerOptions>(o => o.AllowSynchronousIO = true);
+            services.Configure<KestrelServerOptions>(options => options.AllowSynchronousIO = true);
+
             services.AddCors(options => options.AddPolicy("AllowAllCORS", builder
                 => builder.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod()));
-            services.AddGraphQL(x
-                => x.ExposeExceptions = !Environment.IsDevelopment()); // true only in dev mode
 
-            services.AddMvc();
+            services.AddHttpContextAccessor();
+            services
+                .AddSingleton<ISchema, MachShopSchema>()
+                .AddSingleton<MachShopCompositeQuery>()
+                .AddSingleton<MachShopCompositeMutation>()
+                .AddGraphQL()
+                .AddSystemTextJson(deserializerSettings => { }, serializerSettings => { })
+                .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = Environment.IsDevelopment())
+                .AddWebSockets()
+                .AddDataLoader()
+                .AddGraphTypes(typeof(MachShopSchema));
         }
 
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
-            var databaseSettings = 
-
-            containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
-
             containerBuilder.RegisterModule(new ProductsAutofacModule());
             containerBuilder.RegisterModule(new UsersAutofacModule());
 
@@ -72,14 +84,15 @@ namespace MachShop.WebAPI
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
-            containerBuilder.RegisterType<MachShopCompositeQuery>().AsSelf();
-            containerBuilder.RegisterType<MachShopCompositeMutation>().AsSelf();
+            containerBuilder.RegisterType<InstrumentFieldsMiddleware>().AsSelf();
+
             containerBuilder.Register(c =>
             {
-                var cc = c.Resolve<IComponentContext>();
-                var dependencyResolver = new FuncDependencyResolver(type => cc.Resolve(type));
-                return new MachShopSchema(dependencyResolver);
+                var context = c.Resolve<IComponentContext>();
+                var schema = new MachShopSchema(new FuncServiceProvider(type => context.Resolve(type)));
+                return schema;
             }).AsSelf().AsImplementedInterfaces().SingleInstance();
+
         }
         public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
@@ -88,7 +101,6 @@ namespace MachShop.WebAPI
             else
                 app.UseHsts();
 
-            app.UseHttpsRedirection();
             app.UseCors("AllowAllCORS");
 
             app.UseGraphQL<MachShopSchema>();

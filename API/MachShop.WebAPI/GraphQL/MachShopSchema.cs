@@ -1,14 +1,15 @@
-﻿using GraphQL;
+﻿using System;
+using GraphQL;
 using GraphQL.Types;
 
 namespace MachShop.WebAPI.GraphQL
 {
     public class MachShopSchema : Schema
     {
-        public MachShopSchema(IDependencyResolver resolver) : base(resolver)
+        public MachShopSchema(IServiceProvider  serviceProvider) : base(serviceProvider)
         {
-            Query = resolver.Resolve<MachShopCompositeQuery>();
-            Mutation = resolver.Resolve<MachShopCompositeMutation>();
+            Query = serviceProvider.GetService(typeof(MachShopCompositeQuery)).As<IObjectGraphType>();
+            Mutation = serviceProvider.GetService(typeof(MachShopCompositeMutation)).As<IObjectGraphType>();
         }
     }
 }

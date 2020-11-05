@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using MachShop.Products.Infrastructure;
+using MachShop.Products.Infrastructure.EntityFramework;
 using MachShop.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,8 +20,6 @@ namespace MachShop.Products.Common.Modules
                     var dbContextOptions = new DbContextOptionsBuilder<ProductsContext>();
                     if(_dbSettings.UseMSSql)
                         dbContextOptions.UseSqlServer(_dbSettings.ConnectionString);
-                    else if (_dbSettings.UseOracle)
-                        dbContextOptions.UseOracle(_dbSettings.ConnectionString);
                     else if (_dbSettings.UsePostgreSql)
                         dbContextOptions.UseNpgsql(_dbSettings.ConnectionString);
 

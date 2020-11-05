@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MachShop.Products.Common.Processing;
-using MachShop.Products.Infrastructure.Abstract;
+using MachShop.Products.Infrastructure;
 using MachShop.Shared.Commands;
 using MachShop.Shared.Queries;
 

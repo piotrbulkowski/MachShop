@@ -15,6 +15,7 @@ namespace MachShop.Products.Common
             var containerBuilder = new ContainerBuilder();
 
             containerBuilder.RegisterModule(new DatabaseModule(dbSettings));
+            containerBuilder.RegisterModule(new MediatorModule());
             containerBuilder.RegisterInstance(AutoMapperConfig.Initialize());
 
             //containerBuilder.RegisterType<IEventBus>().As<>()

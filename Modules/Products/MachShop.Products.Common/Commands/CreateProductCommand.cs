@@ -1,4 +1,4 @@
-﻿using MachShop.Products.Domain.Product;
+﻿using MachShop.Products.Domain.Entities;
 using MachShop.Shared.Commands;
 
 namespace MachShop.Products.Common.Commands

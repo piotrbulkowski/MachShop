@@ -19,8 +19,6 @@ namespace MachShop.Users.Common.Modules
                     var dbContextOptions = new DbContextOptionsBuilder<UsersContext>();
                     if(_dbSettings.UseMSSql)
                         dbContextOptions.UseSqlServer(_dbSettings.ConnectionString);
-                    else if (_dbSettings.UseOracle)
-                        dbContextOptions.UseOracle(_dbSettings.ConnectionString);
                     else if (_dbSettings.UsePostgreSql)
                         dbContextOptions.UseNpgsql(_dbSettings.ConnectionString);
 

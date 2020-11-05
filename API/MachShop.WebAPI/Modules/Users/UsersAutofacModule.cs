@@ -15,8 +15,6 @@ namespace MachShop.WebAPI.Modules.Users
                 .InstancePerLifetimeScope();
             containerBuilder.RegisterType<UserRoleType>().AsSelf();
             containerBuilder.RegisterType<UserType>().AsSelf();
-
-            containerBuilder.RegisterModule(new MediatorModule());
         }
     }
 }

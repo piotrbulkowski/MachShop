@@ -1,7 +1,7 @@
 ﻿using GraphQL.Types;
 using MachShop.Products.Common.Queries;
-using MachShop.Products.Infrastructure.Abstract;
 using System.Collections.Generic;
+using MachShop.Products.Infrastructure;
 using MachShop.WebAPI.GraphQL.Configuration;
 
 namespace MachShop.WebAPI.Modules.Products.GraphQL

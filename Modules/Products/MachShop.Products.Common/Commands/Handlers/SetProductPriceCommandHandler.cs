@@ -12,19 +12,19 @@ namespace MachShop.Products.Common.Commands.Handlers
 {
     internal class SetProductPriceCommandHandler : ICommandHandler<SetProductPriceCommand>
     {
-        private readonly IProductsRepository _productsRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IEventBus _eventBus;
 
-        public SetProductPriceCommandHandler(IProductsRepository productsRepository, IEventBus eventBus)
+        public SetProductPriceCommandHandler(IProductRepository productRepository, IEventBus eventBus)
         {
-            _productsRepository = productsRepository;
+            _productRepository = productRepository;
             _eventBus = eventBus;
         }
         public async Task<Unit> Handle(SetProductPriceCommand request, CancellationToken cancellationToken)
         {
-            var product = await _productsRepository.GetByIdAsync(request.Id);
+            var product = await _productRepository.GetByIdAsync(request.Id);
 
-            product.SetPrice(request.Price);
+            //product.SetPrice(request.Price);
 
             //_eventBus.RaiseEvent(new )
             return default;

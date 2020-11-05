@@ -8,12 +8,12 @@ namespace MachShop.Products.Common.Commands.Handlers
 {
     internal class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
     {
-        private readonly IProductsRepository _productsRepository;
-        public CreateProductCommandHandler(IProductsRepository productsRepository)
-            => _productsRepository = productsRepository;
+        private readonly IProductRepository _productRepository;
+        public CreateProductCommandHandler(IProductRepository productRepository)
+            => _productRepository = productRepository;
         public async Task<Unit> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            await _productsRepository.AddAsync(request.Product);
+            await _productRepository.AddAsync(request.Product);
             return default;
         }
     }

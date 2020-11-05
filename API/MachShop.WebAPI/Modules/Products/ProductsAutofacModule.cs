@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using MachShop.Products.Common;
-using MachShop.Products.Infrastructure.Abstract;
+using MachShop.Products.Infrastructure;
 using MachShop.WebAPI.Modules.Products.GraphQL;
 
 namespace MachShop.WebAPI.Modules.Products
@@ -14,8 +14,6 @@ namespace MachShop.WebAPI.Modules.Products
                 .As<IProductsModule>()
                 .InstancePerLifetimeScope();
             containerBuilder.RegisterType<ProductType>().AsSelf();
-
-            containerBuilder.RegisterModule(new MediatorModule());
         }
     }
 }

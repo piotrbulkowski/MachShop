@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MachShop.Products.Common.DTO;
-using MachShop.Products.Domain.Product;
+using MachShop.Products.Domain.Entities;
 
 namespace MachShop.Products.Common.Configuration
 {

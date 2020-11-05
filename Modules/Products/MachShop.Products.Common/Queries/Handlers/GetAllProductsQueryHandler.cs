@@ -14,8 +14,8 @@ namespace MachShop.Products.Common.Queries.Handlers
     internal class GetAllProductsQueryHandler : IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDto>>
     {
         private readonly IMapper _mapper;
-        private readonly IProductsRepository _repository;
-        public GetAllProductsQueryHandler(IMapper mapper, IProductsRepository repository)
+        private readonly IProductRepository _repository;
+        public GetAllProductsQueryHandler(IMapper mapper, IProductRepository repository)
         {
             _mapper = mapper;
             _repository = repository;
