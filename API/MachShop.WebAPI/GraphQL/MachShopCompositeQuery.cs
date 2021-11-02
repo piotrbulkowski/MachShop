@@ -8,12 +8,16 @@ namespace MachShop.WebAPI.GraphQL
     {
         public MachShopCompositeQuery(IEnumerable<IGraphQueryMarker> graphQueryMarkers)
         {
-            Name = "MachShopCompositeQuery";
+            Name = nameof(MachShopCompositeQuery);
             foreach (var marker in graphQueryMarkers)
             {
-                var graphObject = marker as ObjectGraphType<object>;
-                foreach (var field in graphObject.Fields)
-                    AddField(field);
+                if (marker is ObjectGraphType<object> graphObject)
+                {
+                    foreach (var field in graphObject.Fields)
+                    {
+                        AddField(field);
+                    }
+                }
             }
         }
     }

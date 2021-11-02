@@ -8,12 +8,16 @@ namespace MachShop.WebAPI.GraphQL
     {
         public MachShopCompositeMutation(IEnumerable<IGraphMutationMarker> graphMutationMarkers)
         {
-            Name = "MachShopCompositeMutation";
+            Name = nameof(MachShopCompositeMutation);
             foreach (var marker in graphMutationMarkers)
             {
-                var graphObject = marker as ObjectGraphType<object>;
-                foreach (var field in graphObject.Fields)
-                    AddField(field);
+                if (marker is ObjectGraphType<object> graphObject)
+                {
+                    foreach (var field in graphObject.Fields)
+                    {
+                        AddField(field);
+                    }
+                }
             }
         }
     }
