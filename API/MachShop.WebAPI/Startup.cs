@@ -62,11 +62,10 @@ namespace MachShop.WebAPI
                 .AddSingleton<MachShopCompositeQuery>()
                 .AddSingleton<MachShopCompositeMutation>()
                 .AddGraphQL()
+                .AddGraphTypes(typeof(MachShopSchema))
                 .AddSystemTextJson(deserializerSettings => { }, serializerSettings => { })
-                .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = Environment.IsDevelopment())
-                .AddWebSockets()
-                .AddDataLoader()
-                .AddGraphTypes(typeof(MachShopSchema));
+                .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = Environment.IsDevelopment());
+                
         }
 
         public void ConfigureContainer(ContainerBuilder containerBuilder)
@@ -104,11 +103,7 @@ namespace MachShop.WebAPI
             app.UseCors("AllowAllCORS");
 
             app.UseGraphQL<MachShopSchema>();
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
-            {
-                Path = "/playground",
-                GraphQLEndPoint = "/graphql"
-            });
+            app.UseGraphQLPlayground(options: new PlaygroundOptions(), path: "/playground");
 
             app.UseRouting();
             app.UseEndpoints(endpoints =>
