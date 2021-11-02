@@ -5,6 +5,5 @@ Modular monolith .NET Core app with GraphQL.
 2. Open the solution and run the project
 3. Navigate to /playground to have fun with GraphQL :)
 ### Development environment
- - .NET Core SDK 3.1
- - Visual Studio 2019
- - SQL Server 2019 Express (not needed atm)
+ - .NET SDK 5
+ - Visual Studio 2019/JetBrains Rider or other IDE
