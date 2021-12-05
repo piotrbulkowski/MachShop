@@ -1,5 +1,5 @@
 ## Machshop
-Modular monolith .NET Core app with GraphQL.
+Modular monolith .NET 5 app with GraphQL.
 ### How to run
 1. Run dotnet restore MachShop.sln inside repo folder
 2. Open the solution and run the project
